@@ -41,3 +41,6 @@ def is_anagram(word1, word2):
 is_anagram("abcd", "dcab")
 
 # Trick 10 - Taking a string input
+x = "1234"
+result = map(lambda x: int(x), x.split())
+print(result)

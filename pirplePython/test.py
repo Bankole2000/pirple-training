@@ -202,5 +202,11 @@
 # if "3" in s:
 #     print("3")
 
-for i in range(10):
-    print(i)
+# for i in range(10):
+#     print(i)
+
+# f = open("VacationPlaces")
+# f.readlines()
+
+string = "a"
+print(string.upper())
