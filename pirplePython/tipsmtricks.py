@@ -6,8 +6,9 @@ print(f"Reverse is {a[::-1]}")
 
 # Trick 2 - Transposing a Matrix
 mat = [[1, 2, 3], [4, 5, 6]]
-transmat = zip(*mat)  # [(1, 4), (2, 5), (3, 6)]
-print(transmat)
+transmat = zip(*mat)
+newList = *transmat  # [(1, 4), (2, 5), (3, 6)]
+print(newList)
 
 # Trick 3 - Spread Operator
 x, y, z = mat[0]
