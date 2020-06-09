@@ -107,10 +107,10 @@ def drop(column, field):
 
 # Player init - Set first player
 player = 1
-
+playerIcon = player1Icon
 # Game start
 while(True):
-    print("Players turn: Player ", player)
+    print("Players turn: Player ", player, " - ", playerIcon)
     MoveColumn = int(input(f"Enter a column (1 - {noOfColumns}):\n"))
     while True:
         if MoveColumn not in range(1, noOfColumns+1):
@@ -137,6 +137,7 @@ while(True):
                 print(f"Game Over: Winner is Player {player} - {player1Icon}")
                 break
             player = 2
+            playerIcon = player2Icon
         else:
             print("Sorry, can't move there - Please try again")
     else:
@@ -148,6 +149,7 @@ while(True):
                 print(f"Game Over: Winner is Player {player} - {player2Icon}")
                 break
             player = 1
+            playerIcon = player1Icon
         else:
             print("sorry, can't move there - Please try again")
     makeBoard(noOfRows, noOfColumns, currentField)
