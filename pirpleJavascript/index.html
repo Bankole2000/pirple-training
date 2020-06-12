@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Funky Page</title>
+    <style>
+      #rectangleWrapper {
+        padding: 50px 50px 0px 50px;
+      }
+      .color-item {
+        min-width: 150px;
+        height: 150px;
+        padding: 10px;
+        cursor: pointer;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>The Funky Page</h1>
+    <h2>A simple page with some funky colored divs on it</h2>
+    <div class="colors" id="rectangleWrapper">
+      <div class="colorbox">
+        <div class="color-item" id="E74C3C"></div>
+        <span>Color: #E74C3C</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="F39C12"></div>
+        <span>Color: #F39C12</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="F7DC6F"></div>
+        <span>Color: #F7DC6F</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="2ECC71"></div>
+        <span>Color: #2ECC71</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="138D75"></div>
+        <span>Color: #138D75</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="3498DB"></div>
+        <span>Color: #3498DB</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="8E44AD"></div>
+        <span>Color: #8E44AD</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="AF7AC5"></div>
+        <span>Color: #AF7AC5</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="717D7E"></div>
+        <span>Color: #717D7E</span>
+      </div>
+      <div class="colorbox">
+        <div class="color-item" id="34495E"></div>
+        <span>Color: #34495E</span>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const colorBoxes = document.querySelectorAll('.color-item');
+        console.log("Here are the rectangle ID's");
+        for (let box of colorBoxes) {
+          box.style.backgroundColor = `#${box.id}`;
+          console.log(box.id);
+        }
+      });
+    </script>
+  </body>
+</html>

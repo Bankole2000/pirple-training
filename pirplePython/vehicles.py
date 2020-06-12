@@ -59,11 +59,11 @@ def createRandomPlane(player):
 
 
 def hwcreateRandomPlane(player):
-    PlaneData = randint(0, len(randomPlanes))
+    PlaneData = randint(0, len(randomPlanes) - 1)
     newPlane = Planes(randomPlanes[PlaneData][0], randomPlanes[PlaneData]
                       [1], randomPlanes[PlaneData][2], randomPlanes[PlaneData][3])
     player.addPlane(newPlane)
-    print(f"\n===-*!! Congrats {player.name}! You added a new Plane !!*-===")
+    print(f"\n===-*!! Congrats {player.name}! You got a new Plane !!*-===")
     print(newPlane)
 
 
@@ -140,6 +140,8 @@ class Planes(Vehicle):
             self.isFlying = False
             return False
         else:
+            print(
+                f"{self.make} {self.model} flew on a trip around the world")
             self.isFlying = True
 
     def Land(self):
@@ -336,6 +338,8 @@ def flyMultiTrips(player):
                 for i in range(noOfTrips):
 
                     player.planes[selectedPlaneIndex].Fly()
+                    print(
+                        f"That's {player.planes[selectedPlaneIndex].tripsSinceMaintenance} trips now")
                     player.planes[selectedPlaneIndex].Land()
                 if player.planes[selectedPlaneIndex].tripsSinceMaintenance >= 100:
                     print(
@@ -436,6 +440,7 @@ def repairVehicle(player):
             print(
                 f" - This car (the {car.year} {car.make} {car.model}) hasn't been on any trips yet, so does not need fixing/maintenance")
     elif repairOption < i and repairOption > len(player.cars) and repairOption <= (len(player.cars) + len(player.planes)):
+        repairOption = repairOption - (len(player.cars))
         plane = player.planes[repairOption-1]
         if player.planes[repairOption-1].tripsSinceMaintenance > 0:
             player.planes[repairOption-1].Repair()
