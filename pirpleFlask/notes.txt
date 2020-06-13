@@ -1,0 +1,40 @@
+NOTE: Setting p ubuntu on Win 10
+
+On windows go to Settings (Win +I) click update and Security
+
+There should be a menu on the left side click For Developers
+
+Then go to control panel, programs
+
+Then select Turn windows features on and off
+
+You should see a folder "Windows Subsystem for Linux"
+
+It'll prompt you to restart the computer
+
+Then go to the Microsoft App store, Search then type ubuntu, then select ubuntu 16.04
+
+
+SECTION: How to create users on Ubuntu WSL
+> sudo adduser username
+Fill in the questions
+
+Grant the user superuser privileges
+> sudo usermod -aG sudo username 
+
+To Switch to user
+> su - username 
+
+Useful user commands 
+> clear     # clear the console
+> ls        # show contents of current directory
+> pwd       # shows path of current directory
+> mkdir foldername    # make a folder 
+> cd directory        # change directory
+> touch filename.ext  # create file 
+> nano filename.ext   # create file and open in nano text editor
+  Ctrl + o -> save file
+  Ctrl + x -> exit
+> cd ..     # go to upper directory
+> mv file/folder destination/
+> 
