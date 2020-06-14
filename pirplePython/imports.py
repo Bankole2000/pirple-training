@@ -31,7 +31,7 @@ demoUrl = "https://example.com"  # url for demo sample
 
 def viewNotes():
     clear()
-    print(Fore.BLUE + "\n - [1] Notes on the 'urllib' package")
+    print(Fore.CYAN + "\n - [1] Notes on the 'urllib' package")
     print("-"*40 + Fore.RESET)
     print(Fore.MAGENTA + "urllib " + Fore.RESET +
           "is a python package that contains several modules \nthat helps with building, loading and parsing URLS. It contains ")
@@ -49,15 +49,15 @@ def viewNotes():
     print("This module parses robots.txt files for permissions to bots and crawlers etc")
     input("\nPress Enter to Continue...")
     clear()
-    print(Fore.BLUE + "\n - [1] Notes on the 'urllib' package")
+    print(Fore.CYAN + "\n - [1] Notes on the 'urllib' package")
     print("-"*40 + Fore.RESET)
     print("To begin using any of the" + Fore.MAGENTA + " urllib " + Fore.RESET +
           "modules, we first import \nthe package (or the modules we wish to use) it into the file or REPL like so:")
-    print(Fore.BLUE + ">>> import " + Fore.MAGENTA +
+    print(Fore.CYAN + ">>> import " + Fore.MAGENTA +
           "urllib" + Fore.RESET, end="")
     print(" # OR ", end="")
-    print(Fore.BLUE + "\n>>> from " + Fore.MAGENTA +
-          "urllib " + Fore.BLUE + "import " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> from " + Fore.MAGENTA +
+          "urllib " + Fore.CYAN + "import " + Fore.MAGENTA +
           "response" + Fore.RESET+", " + Fore.MAGENTA + " parse", end="")
     print(Fore.RESET + "\nThis gives us access to very useful properties \nand methods provided by the package and it's modules. ")
     print("Methods like: ")
@@ -85,18 +85,18 @@ def viewNotes():
 # Menu option 3 handler
 def demoParser(url):
     clear()
-    print(Fore.BLUE + "\n - [3] Testing 'urllib' parse module")
+    print(Fore.CYAN + "\n - [3] Testing 'urllib' parse module")
     print("-"*40 + Fore.RESET)
     print("Requested URL => ", url, end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> ", end="")
+    print(Fore.CYAN + "\n>>> ", end="")
     print("parsedUrl = " + Fore.MAGENTA + "parse." + Fore.GREEN + "urlparse"
           "(" + Fore.YELLOW + url + Fore.GREEN + ")")
     parsedUrl = parse.urlparse(url)
     sleep(shortTime)
     print(parsedUrl)
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> ", end="")
+    print(Fore.CYAN + "\n>>> ", end="")
     print("splitUrl = " + Fore.MAGENTA + "parse." + Fore.GREEN + "urlsplit"
           "(" + Fore.YELLOW + url + Fore.GREEN + ")")
     splitUrl = parse.urlsplit(url)
@@ -104,23 +104,23 @@ def demoParser(url):
     print(splitUrl)
     if len(parse.urlsplit(url).query) > 0:
         sleep(shortTime)
-        print(Fore.BLUE + "\n>>> ", end="")
+        print(Fore.CYAN + "\n>>> ", end="")
         print("queryString = " + Fore.MAGENTA + "parse." + Fore.GREEN + "urlsplit"
               "(" + Fore.YELLOW + url + Fore.GREEN + ")." + Fore.RED + "query" + Fore.GREEN)
         queryString = parse.urlsplit(url).query
         sleep(shortTime)
         print(queryString)
         sleep(shortTime)
-        print(Fore.BLUE + "\n>>> ", end="")
+        print(Fore.CYAN + "\n>>> ", end="")
         print("queryParamsQsl = " + Fore.MAGENTA + "parse." + Fore.GREEN + "parse_qsl"
               "(" + Fore.YELLOW + queryString + Fore.GREEN + ")." + Fore.RED + "query" + Fore.GREEN)
         queryParamsQsl = parse.parse_qsl(queryString)
         sleep(shortTime)
         print(queryParamsQsl)
         sleep(shortTime)
-        print(Fore.BLUE + "\n>>> ", end="")
+        print(Fore.CYAN + "\n>>> ", end="")
         print("querydict = dict(" + Fore.MAGENTA +
-              str(queryParamsQsl) + Fore.BLUE + ")" + Fore.GREEN)
+              str(queryParamsQsl) + Fore.CYAN + ")" + Fore.GREEN)
         querydict = dict(queryParamsQsl)
         sleep(shortTime)
         print(querydict)
@@ -138,18 +138,18 @@ def demoParser(url):
 # Menu Option 2 handler
 def viewCommands():
     clear()
-    print(Fore.BLUE + "\n - [2] 'urllib' package code samples")
+    print(Fore.CYAN + "\n - [2] 'urllib' package code samples")
     print("-"*40 + Fore.RESET)
     print("Here's some code samples showing the usage of \nthe " + Fore.MAGENTA + "urllib " + Fore.RESET +
           "package - specifically the request module.")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> import " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> import " + Fore.MAGENTA +
           "urllib " + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# imports the 'urllib' package ", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> dir(" + Fore.MAGENTA +
-          "urllib" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> dir(" + Fore.MAGENTA +
+          "urllib" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t\t# returns the contents of the package", end="")
     sleep(longTime)
@@ -159,13 +159,13 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# notice the 'response' and 'parse' modules ", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n\n>>> from " + Fore.MAGENTA +
-          "urllib " + Fore.BLUE + "import " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n\n>>> from " + Fore.MAGENTA +
+          "urllib " + Fore.CYAN + "import " + Fore.MAGENTA +
           "response " + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# imports the 'response' module from the 'urllib' package ", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> ", end="")
+    print(Fore.CYAN + "\n>>> ", end="")
     print("resp = " + Fore.MAGENTA + "request." + Fore.GREEN + "urlopen"
           "(" + Fore.YELLOW + demoUrl + Fore.GREEN + ")", end="")
     sleep(shortTime)
@@ -174,8 +174,8 @@ def viewCommands():
     print("\n # And stores the response in the 'resp' variable. ", end="")
     resp = request.urlopen(demoUrl)
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> type(" + Fore.YELLOW +
-          "resp" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> type(" + Fore.YELLOW +
+          "resp" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t\t# Let's check the data type of the response", end="")
     sleep(longTime)
@@ -184,8 +184,8 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# Notice it is a http Response object", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> dir(" + Fore.YELLOW +
-          "resp" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> dir(" + Fore.YELLOW +
+          "resp" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# Returns the properties and methods of the Reponse object", end="")
     sleep(longTime)
@@ -196,7 +196,7 @@ def viewCommands():
     print(Fore.RESET + "\t# With these properties and methods we can analyze the Reponse object", end="")
 
     sleep(longTime)
-    print(Fore.BLUE + "\n\n>>> resp." +
+    print(Fore.CYAN + "\n\n>>> resp." +
           Fore.MAGENTA + "code" + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t\t# returns the status code of the response" +
@@ -208,7 +208,7 @@ def viewCommands():
     print(Fore.RESET + "\t# 200 = OK, 403 = Forbidden, 404 = Not Found, 500 = Server Error", end="")
 
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> resp." +
+    print(Fore.CYAN + "\n>>> resp." +
           Fore.MAGENTA + "_method" + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# returns the request method used" +
@@ -219,7 +219,7 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# This was a 'GET' request. 'POST', 'PUT' and 'HEAD' requests etc are also possible.", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> resp." + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> resp." + Fore.MAGENTA +
           "length" + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t\t# returns the size of the response in bytes" +
@@ -230,7 +230,7 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# Size of the response object in bytes", end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> resp." + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> resp." + Fore.MAGENTA +
           "peek()" + Fore.RESET, end="")
     sleep(shortTime)
     print(Fore.RESET + "\t\t# returns the bytes object of the response html", end="")
@@ -242,14 +242,14 @@ def viewCommands():
     print(Fore.RESET + "\n# The 'b' prefix means it's a bytes datatype" +
           Fore.GREEN, end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n\n>>> data = " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n\n>>> data = " + Fore.MAGENTA +
           "resp." + Fore.YELLOW + "read()", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# method to retrieve the body of the response in the variable 'data'" + Fore.GREEN, end="")
     sleep(longTime)
     data = resp.read()
-    print(Fore.BLUE + "\n>>> type(" + Fore.YELLOW +
-          "data" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> type(" + Fore.YELLOW +
+          "data" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# returns the datatype of the response content" +
           Fore.GREEN, end="")
@@ -259,8 +259,8 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# We see it's of type bytes" + Fore.GREEN, end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> len(" + Fore.YELLOW +
-          "data" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> len(" + Fore.YELLOW +
+          "data" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# returns the size of the data " + Fore.GREEN, end="")
     sleep(longTime)
@@ -269,15 +269,15 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# We see the size in bytes" + Fore.GREEN, end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> html = " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> html = " + Fore.MAGENTA +
           "data." + Fore.GREEN + "decode(" + Fore.YELLOW + "\"UTF-8\" " + Fore.GREEN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# The data is in utf-8 format so we decode it to retrieve the html" +
           Fore.GREEN, end="")
     html = data.decode("UTF-8")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> type(" + Fore.YELLOW +
-          "html" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> type(" + Fore.YELLOW +
+          "html" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# returns the datatype of the now decoded html content" + Fore.GREEN, end="")
     sleep(longTime)
@@ -286,8 +286,8 @@ def viewCommands():
     sleep(shortTime)
     print(Fore.RESET + "\t# We see it's of type String" + Fore.GREEN, end="")
     sleep(longTime)
-    print(Fore.BLUE + "\n>>> print(" + Fore.YELLOW +
-          "html" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> print(" + Fore.YELLOW +
+          "html" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print(Fore.RESET + "\t# This will Print out the web page we've fetched " +
           Fore.RESET, end="")
@@ -298,11 +298,11 @@ def viewCommands():
     if resp.code == 200:
         print(u'\u2713'*3, end="")
         print(Fore.RESET + " SUCCESS!!! We retrieved the webpage using the" +
-              Fore.MAGENTA + " urllib." + Fore.BLUE + "request " + Fore.RESET + "module!")
+              Fore.MAGENTA + " urllib." + Fore.CYAN + "request " + Fore.RESET + "module!")
     else:
         print(Fore.RESET + u'\u274C', end="")
         print(Fore.RESET + " uh oh!  The" +
-              Fore.MAGENTA + "urllib." + Fore.BLUE + "request " + Fore.RESET + "module works, but we got an error code ", str(resp.code))
+              Fore.MAGENTA + "urllib." + Fore.CYAN + "request " + Fore.RESET + "module works, but we got an error code ", str(resp.code))
         print("Maybe Try a different URL")
 
     input("\nPress Enter to continue...")
@@ -312,62 +312,62 @@ def viewCommands():
 # Menu option 3 part 1
 def runCode(url):
     clear()
-    print(Fore.BLUE + "\n - [3] Testing 'urllib' request module")
+    print(Fore.CYAN + "\n - [3] Testing 'urllib' request module")
     print("-"*40 + Fore.RESET)
     print("Requested URL => ", url, end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> ", end="")
+    print(Fore.CYAN + "\n>>> ", end="")
     print("resp = " + Fore.MAGENTA + "request." + Fore.GREEN + "urlopen"
           "(" + Fore.YELLOW + url + Fore.GREEN + ")", end="")
     resp = request.urlopen(url)
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> type(" + Fore.YELLOW +
-          "resp" + Fore.BLUE + ")", end="")
+    print(Fore.CYAN + "\n>>> type(" + Fore.YELLOW +
+          "resp" + Fore.CYAN + ")", end="")
     sleep(shortTime)
     print("\n" + Fore.GREEN, end="")
     print(type(resp), end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> dir(" + Fore.YELLOW +
-          "resp" + Fore.BLUE + ")" + Fore.GREEN, end="")
+    print(Fore.CYAN + "\n>>> dir(" + Fore.YELLOW +
+          "resp" + Fore.CYAN + ")" + Fore.GREEN, end="")
     sleep(shortTime)
     print(dir(resp), end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n\n>>> resp." +
+    print(Fore.CYAN + "\n\n>>> resp." +
           Fore.MAGENTA + "_method" + Fore.RESET, end="")
-    print(Fore.BLUE + ", resp." +
+    print(Fore.CYAN + ", resp." +
           Fore.MAGENTA + "code" + Fore.RESET, end="")
     sleep(shortTime)
     print("\n" + Fore.GREEN, end="")
     print(resp._method, end=", ")
     print(resp.code, end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> resp." + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> resp." + Fore.MAGENTA +
           "length" + Fore.RESET, end="")
     sleep(shortTime)
     print("\n" + Fore.GREEN, end="")
     print(resp.length, end="")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> data = " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> data = " + Fore.MAGENTA +
           "resp." + Fore.YELLOW + "read()", end="")
     sleep(shortTime)
     data = resp.read()
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> html = " + Fore.MAGENTA +
+    print(Fore.CYAN + "\n>>> html = " + Fore.MAGENTA +
           "data." + Fore.GREEN + "decode(" + Fore.YELLOW + "\"UTF-8\" " + Fore.GREEN + ")", end="")
     html = data.decode("UTF-8")
     sleep(shortTime)
-    print(Fore.BLUE + "\n>>> print(" + Fore.YELLOW +
-          "html" + Fore.BLUE + ")" + Fore.GREEN)
+    print(Fore.CYAN + "\n>>> print(" + Fore.YELLOW +
+          "html" + Fore.CYAN + ")" + Fore.GREEN)
     sleep(shortTime)
     print(html)
     if resp.code == 200:
         print(u'\u2713'*3, end="")
         print(Fore.RESET + " SUCCESS!!! We retrieved the webpage using the" +
-              Fore.MAGENTA + " urllib." + Fore.BLUE + "request " + Fore.RESET + "module!")
+              Fore.MAGENTA + " urllib." + Fore.CYAN + "request " + Fore.RESET + "module!")
     else:
         print(Fore.RESET + u'\u274C', end="")
         print(Fore.RESET + " uh oh!  The" +
-              Fore.MAGENTA + "urllib." + Fore.BLUE + "request " + Fore.RESET + "module works, but we got an error code ", str(resp.code))
+              Fore.MAGENTA + "urllib." + Fore.CYAN + "request " + Fore.RESET + "module works, but we got an error code ", str(resp.code))
         print("Maybe Try a different URL")
 
     input("\nPress Enter to continue...")
@@ -380,15 +380,15 @@ def mainMenu():
     print(Fore.GREEN + "\n====*** Intro to the " + Fore.MAGENTA +
           " URLLIB " + Fore.GREEN + " package ***====" + Style.RESET_ALL)
     print("Learn about the URLLIB python package ")
-    print(Fore.BLUE + " [1]" + Fore.RESET +
+    print(Fore.CYAN + " [1]" + Fore.RESET +
           " View Notes on the URLLIB package")
-    print(Fore.BLUE + " [2]" + Fore.RESET +
+    print(Fore.CYAN + " [2]" + Fore.RESET +
           " View Sample URLLIB code and commands")
-    print(Fore.BLUE + " [3]" + Fore.RESET + " Try out the URLLIB")
-    print(Fore.BLUE + " [4]" + Fore.RESET + " Exit Program")
+    print(Fore.CYAN + " [3]" + Fore.RESET + " Try out the URLLIB")
+    print(Fore.CYAN + " [4]" + Fore.RESET + " Exit Program")
 
     while True:
-        print("\n - Please select an option " + Fore.BLUE +
+        print("\n - Please select an option " + Fore.CYAN +
               "(1 - 4)" + Fore.RESET+": ", end="")
         option = input()
         if int(option) == 1:

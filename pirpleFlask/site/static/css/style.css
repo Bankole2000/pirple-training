@@ -1,0 +1,140 @@
+:root {
+  font-size: 16px;
+  font-family: 'Open Sans';
+  --primary: #ffe100;
+  --success: lightgreen;
+  --error: tomato;
+  --secondary: #6649b8;
+  --shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: consolas;
+  background-color: aliceblue;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  border-bottom: 2px solid var(--secondary);
+  color: black;
+}
+
+a:hover {
+  background-color: var(--secondary);
+  color: white;
+}
+
+a *:hover {
+  background-color: var(--secondary);
+  color: white;
+}
+
+header {
+  width: 100%;
+  padding: 25px 10%;
+  background-color: white;
+  box-shadow: var(--shadow);
+}
+
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0px 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+  padding: 5px;
+  border-bottom: 2px solid var(--secondary);
+}
+
+nav ul li a:hover {
+  background-color: var(--secondary);
+  color: white;
+}
+
+main {
+  width: 90%;
+  padding: 25px 5vw;
+  margin: 5vw auto;
+  background: white;
+  margin-bottom: 10vh;
+}
+
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+  margin: 25px auto;
+}
+
+.profile-image {
+  border: 5px solid var(--secondary);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  width: 100%;
+}
+
+.image-container {
+  width: 30%;
+  min-width: 200px;
+}
+.details {
+  padding: 25px;
+}
+
+.details h1,
+.details h2,
+.details h3,
+.details h4,
+.details h5,
+.details h6,
+.details p {
+  padding: 10px 0;
+  line-height: 1rem;
+}
+
+.details h3 {
+  line-height: 1.5rem;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  position: fixed;
+  bottom: 0;
+  padding: 25px 10%;
+  background-color: white;
+}
+
+@media screen and (max-width: 500px) {
+  header {
+    padding: 20px 3%;
+  }
+  nav ul li {
+    margin: 0;
+  }
+
+  .details {
+    padding: 0;
+  }
+}

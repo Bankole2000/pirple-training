@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <title>Flask app</title>
+  </head>
+  <body>
+    <header>
+      <div class="nav-wrapper">
+        <div class="logo">
+          <a href="/"><h3>🐍My Flask App</h3></a>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/">🏠Home</a></li>
+            <li><a href="/about">🤵About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      {% block main %} {% endblock main %}
+    </main>
+    <footer>
+      <h3>
+        &copy;<span class="year"></span>
+        <a href="https://bankole2000.github.io/portfolio" target="_blank"
+          >Bankole</a
+        >
+      </h3>
+    </footer>
+    <script src="../static/js/app.js"></script>
+  </body>
+</html>

@@ -37,4 +37,11 @@ Useful user commands
   Ctrl + x -> exit
 > cd ..     # go to upper directory
 > mv file/folder destination/
-> 
+> cp fileToCopy.ext fileCopiedTo.ext
+> rm -rf deletefolder
+> rm deletefile 
+
+Mounting the windows drive 
+
+> cd /mnt/driveName/path/to/folder/file
+
