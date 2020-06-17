@@ -15,3 +15,4 @@ print(type(cardList[0]))
 # Hearts White	♡	♡	&#x2661;
 # Diamonds White	♢	♢	&#x2662;
 # Clubs White	♧	♧	&#x2667;
+

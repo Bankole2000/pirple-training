@@ -81,3 +81,7 @@ thisdict = dict(brand="Ford", model="Mustang", year=1964)
 # note the use of equals rather than colon for the assignment
 print(thisdict)
 print(thisdict['brand'])
+# print(myList[:3])
+# myList.remove(myList[])
+print(myList[len(myList)-5:len(myList)])
+print(myList)
