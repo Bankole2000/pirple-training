@@ -18,10 +18,16 @@ blackSuite = (u'\u2660',  u'\u2663')
 suites = (u'\u2660', u'\u2665', u'\u2666', u'\u2663')
 joker = (u'\u2605',)
 noOfJokers = 5
-numbers = [2, 3, 4, 5, 6, 7, 8, 9]
-letters = ["A", "J", "Q", "K"]
+# numbers = [2, 3, 4, 5, 6, 7, 8, 9]
+numbers = [2, 5, 8]
+# letters = ["A", "J", "Q", "K"]
+letters = ["A", "K"]
+specials = ["K", "A", "2", "5", "8"]
+cardDict = {'A': 'hold on', '2': 'pick two', '5': 'pick three',
+            '8': 'suspension', 'K': 'general market'}
 noOfStartingCards = 5
 deck = []
+gameIsOn = False
 
 
 ########## Game Functions #########
@@ -138,18 +144,24 @@ def showHelp():
           " Game Card " + Fore.RESET + "may be played.")
     showTitle('basic rules')
     print(Fore.CYAN + " [1]" + Fore.RESET +
-          " You can only play cards that match the number or suite of the Game Card")
+          " You can only play cards that match the " + Fore.CYAN + "number" + Fore.RESET + " or " + Fore.CYAN + "suite" + Fore.RESET + " of the " + Fore.MAGENTA + "Game Card" + Fore.RESET)
     print(Fore.CYAN + " [2]" + Fore.RESET +
-          " The only exception to Rule [1] are the WHOT Cards: ", end="")
+          " The only exception to Rule [1] are the " + Fore.YELLOW + " WHOT " + Fore.RESET + " Cards: ", end="")
     displaySingleCard("W1 ★", ",")
     displaySingleCard("W2 ★", ",")
     displaySingleCard("W3 ★", ",")
     displaySingleCard("W4 ★", ",")
     print("\n", end="")
-    print(Fore.CYAN + " [3]" + Fore.RESET + " View Rules")
-    print(Fore.CYAN + " [4]" + Fore.RESET + " Exit Program")
+    print(Fore.CYAN + " [3]" + Fore.RESET +
+          " When a " + Fore.YELLOW + "WHOT" + Fore.RESET + " Card is played, the requested Suite MUST be played next.")
+    print(Fore.CYAN + " [4]" + Fore.RESET +
+          " If the player cannot play any of their cards, they have to go to the " + Fore.MAGENTA + "market" + Fore.RESET + ".")
+    print(Fore.CYAN + " [5]" + Fore.RESET +
+          " The first player to play all their cards, win, however - Rule[6].")
+    print(Fore.CYAN + " [5]" + Fore.RESET + " The game CANNOT be won with a " + Fore.YELLOW + "'hold on'" + Fore.RESET +
+          ", " + Fore.YELLOW + "'suspension'" + Fore.RESET + ", or " + Fore.YELLOW + "WHOT" + Fore.RESET + " card.")
     showTitle("special Cards")
-    print("- These are cards that have special effects when played \ndepending on if those effects are enabled in the rules")
+    print("- These are cards that have special effects when played \ndepending on if those effects are enabled in the game options.")
     print("\t- Card -\t\t- Effect -\t\t- Description -\t")
     displaySingleCard("A ♠", ", ")
     displaySingleCard("A ♥", ", ")
@@ -186,19 +198,24 @@ def showHelp():
 ########## Game Objects ##########
 # Player Object
 class Player:
-    def __init__(self, name, score=0, cards=[], isToPickTwo=False, isToPickThree=False, isSuspended=False, hasWon=False, isTurn=False, hasPlayed=False):
+    def __init__(self, name, score=0, cards=[], hasToPick=0, isSuspended=False, hasWon=False, isTurn=False, hasPlayed=False, hasToPlay="", jokerWasLastCard=False):
         self.name = name
         self.score = score
         self.cards = cards
         self.hasWon = hasWon
         self.isTurn = isTurn
         self.hasPlayed = hasPlayed
+        self.hasToPlay = hasToPlay
+        self.hasToPick = hasToPick
+        self.isSuspended = isSuspended
+        self.jokerWasLastCard = jokerWasLastCard
 
     def goToMarket(self, market, opponent):
         self.cards.append(market[len(market)-1])
         market.pop()
         shuffle(market)
-        print(self.name, " picked a card from the market")
+        print(Fore.CYAN + self.name + Fore.RESET +
+              " picked a card from the market")
         self.isTurn = False
         opponent.isTurn = True
 
@@ -220,8 +237,8 @@ class Player:
     def canPlay(self, cardIndex, gameCard):
         cardParts = self.cards[cardIndex-1].split(" ")
         gameCardParts = gameCard[0].split(" ")
-        print(cardParts[0], gameCardParts[0])
-        print(cardParts[1], gameCardParts[1])
+        # print(cardParts[0], gameCardParts[0])
+        # print(cardParts[1], gameCardParts[1])
         if cardParts[0] == gameCardParts[0]:
             return True
         elif cardParts[1] == gameCardParts[1]:
@@ -229,75 +246,241 @@ class Player:
         else:
             return False
 
-    def playJoker(self):
-        print(self.name, "played a WHOT Card")
+    def playJoker(self, computer):
+        self.hasToPlay = ""
+        print(Fore.CYAN + self.name + Fore.RESET + " played a " +
+              Fore.YELLOW + "WHOT" + Fore.RESET + " Card")
         print("Which Suite do you want?", end="")
         print(" (1) ", end="")
         displaySingleSuite(1)
         print(" (2) ", end="")
         displaySingleSuite(2)
-        print(" (3) ", end="")
+        print("(3) ", end="")
         displaySingleSuite(3)
         print(" (4) ", end="")
         displaySingleSuite(4)
         suiteChoice = input(": ")
         try:
             if int(suiteChoice) == 1:
-                print(self.name, " chose ", end="")
+                print(Fore.CYAN + self.name + Fore.RESET +
+                      " said - I want a ", end="")
+                displaySingleSuite(1)
+                computer.hasToPlay = suites[0]
+                self.hasToPlay = suites[0]
             elif int(suiteChoice) == 2:
-                print(self.name, " chose ", end="")
-                pass
-            elif int(suiteChoice) == 3:
-                print(self.name, " chose ", end="")
-                pass
-            elif int(suiteChoice) == 4:
-                print(self.name, " chose ", end="")
-                pass
+                print(Fore.CYAN + self.name + Fore.RESET +
+                      " said - I want a ", end="")
+                displaySingleSuite(2)
+                self.hasToPlay = suites[2]
+                computer.hasToPlay = suites[2]
 
+            elif int(suiteChoice) == 3:
+                print(Fore.CYAN + self.name + Fore.RESET +
+                      " said - I want a ", end="")
+                displaySingleSuite(3)
+                computer.hasToPlay = suites[3]
+                self.hasToPlay = suites[3]
+
+            elif int(suiteChoice) == 4:
+                print(Fore.CYAN + self.name + Fore.RESET +
+                      " said - I want a ", end="")
+                displaySingleSuite(4)
+                self.hasToPlay = suites[1]
+                computer.hasToPlay = suites[1]
         except:
             if suiteChoice == "--help":
                 showHelp()
             elif suiteChoice == "--resume":
                 loadSavedGame()
+        print("\n", end="")
 
-    def autoPlayJoker(self):
-        print(self.name, "played a WHOT Card")
+    def autoPlayJoker(self, player, Index, gameCard, market, rules):
+        gameCard.append(self.cards[Index])
+        print(Fore.CYAN + self.name + Fore.RESET + " played ", end="")
+        displaySingleCard(self.cards[Index], end="\n")
+        if len(self.cards) == 1 and self.cards[Index].split(" ")[1] == joker[0]:
+            self.jokerWasLastCard = True
+            print(Fore.CYAN + self.name + Fore.RESET +
+                  "'s Last Card was a WHOT so")
+        self.cards.pop(Index)
+        if self.jokerWasLastCard:
+            self.goToMarket(market, player)
+            self.jokerWasLastCard = False
+        market.append(gameCard[0])
+        shuffle(market)
+        gameCard.pop(0)
+        if len(self.cards) == 1:
+            print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                  Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+        if len(self.cards) == 0:
+            self.hasWon = True
+        self.isTurn = False
+        player.isTurn = True
+        print(Fore.CYAN + self.name + Fore.RESET + " played a " + Fore.YELLOW +
+              "WHOT" + Fore.RESET + " Card")
+        suiteChoice = choice(suites)
+        print(Fore.CYAN + self.name + Fore.RESET + " said - I want a " +
+              Fore.MAGENTA + suiteChoice + Fore.RESET)
+        player.hasToPlay = suiteChoice
+        self.hasToPlay = suiteChoice
+        return
 
-    def playCard(self, cardIndex, gameCard, market, opponent):
+    def playCard(self, cardIndex, gameCard, market, opponent, rules):
+
         cardParts = self.cards[cardIndex-1].split(" ")
         gameCardParts = gameCard[0].split(" ")
         if cardParts[0] == gameCardParts[0]:
-            print(self.name, " played ", end="")
+            print(Fore.CYAN + self.name + Fore.RESET + " played ", end="")
             displaySingleCard(self.cards[cardIndex-1], end="\n")
             gameCard.append(self.cards[cardIndex-1])
+
+            if self.cards[cardIndex-1].split(" ")[0] in cardDict.keys():
+                key = self.cards[cardIndex-1].split(" ")[0]
+                if specials.index(key) == 0 and rules.generalMarket:
+                    print("line 335 - That's a " + Fore.YELLOW +
+                          cardDict[key] + Fore.RESET)
+                    opponent.goToMarket(market, self)
+                    self.cards.pop(cardIndex-1)
+                    market.append(gameCard[0])
+                    shuffle(market)
+                    gameCard.pop(0)
+                    if len(self.cards) == 1:
+                        print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                              Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                    if len(self.cards) == 0:
+                        self.hasWon = True
+                    self.isTurn = True
+                    opponent.isTurn = False
+                    return
+
+                elif specials.index(key) == 1 and rules.holdOn:
+                    print("line 352 - That's a " + Fore.YELLOW +
+                          cardDict[key] + Fore.RESET)
+                    self.cards.pop(cardIndex-1)
+                    market.append(gameCard[0])
+                    shuffle(market)
+                    gameCard.pop(0)
+                    if len(self.cards) == 1:
+                        print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                              Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                    if len(self.cards) == 0:
+                        print(Fore.CYAN + self.name + Fore.RESET + " can't win with a " +
+                              Fore.YELLOW + "'hold on'" + Fore.RESET + " so")
+                        self.goToMarket(market, opponent)
+                        self.hasWon = False
+                    self.isTurn = True
+                    opponent.isTurn = False
+                    return
+
             self.cards.pop(cardIndex-1)
             market.append(gameCard[0])
             shuffle(market)
             gameCard.pop(0)
+            if len(self.cards) == 1:
+                print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                      Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+            if len(self.cards) == 0:
+                self.hasWon = True
             self.isTurn = False
             opponent.isTurn = True
 
         elif cardParts[1] == gameCardParts[1]:
-            print(self.name, " played ", end="")
+            print(Fore.CYAN + self.name + Fore.RESET + " played ", end="")
             displaySingleCard(self.cards[cardIndex-1], end="\n")
             gameCard.append(self.cards[cardIndex-1])
+            if self.cards[cardIndex-1].split(" ")[0] in cardDict.keys():
+                key = self.cards[cardIndex-1].split(" ")[0]
+                if specials.index(key) == 0 and rules.generalMarket:
+                    print("line 419 - That's a " + Fore.YELLOW +
+                          cardDict[key] + Fore.RESET)
+                    opponent.goToMarket(market, self)
+                    self.cards.pop(cardIndex-1)
+                    market.append(gameCard[0])
+                    shuffle(market)
+                    gameCard.pop(0)
+                    if len(self.cards) == 1:
+                        print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                              Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                    if len(self.cards) == 0:
+                        self.hasWon = True
+                    self.isTurn = True
+                    opponent.isTurn = False
+                    return
+
+                elif specials.index(key) == 1 and rules.holdOn:
+                    print("line 352 - That's a " + Fore.YELLOW +
+                          cardDict[key] + Fore.RESET)
+                    self.cards.pop(cardIndex-1)
+                    market.append(gameCard[0])
+                    shuffle(market)
+                    gameCard.pop(0)
+                    if len(self.cards) == 1:
+                        print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                              Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                    if len(self.cards) == 0:
+                        print(Fore.CYAN + self.name + Fore.RESET + " can't win with a " +
+                              Fore.YELLOW + "'hold on'" + Fore.RESET + " so")
+                        self.goToMarket(market, opponent)
+                        self.hasWon = False
+                    self.isTurn = True
+                    opponent.isTurn = False
+                    return
+
             self.cards.pop(cardIndex-1)
             market.append(gameCard[0])
             shuffle(market)
             gameCard.pop(0)
+            if len(self.cards) == 1:
+                print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                      Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+            if len(self.cards) == 0:
+                self.hasWon = True
             self.isTurn = False
             opponent.isTurn = True
 
-    def autoPlay(self, player, gameCard, market):
-        print(self.cards)
+    def hasJoker(self):
+        for card in self.cards:
+            if card.split(" ")[1] == joker[0]:
+                return True
+        return False
+
+    def autoPlay(self, player, gameCard, market, rules):
+
+        if len(self.hasToPlay) > 0:
+            hasJoker = self.hasJoker()
+            if hasJoker:
+                for card in self.cards:
+                    if card.split(" ")[1] == joker[0]:
+                        jokerIndex = self.cards.index(card)
+                        break
+                self.autoPlayJoker(player, jokerIndex, gameCard, market, rules)
+            else:
+                for card in self.cards:
+                    if card.split(" ")[1] == self.hasToPlay:
+                        indexToPlay = self.cards.index(card)
+                        self.forcePlay(indexToPlay, gameCard,
+                                       player, market, rules)
+                        self.hasToPlay = ""
+                        player.hasToPlay = ""
+                        return
+                self.goToMarket(market, player)
+            return
+        hasJoker = self.hasJoker()
+        if hasJoker:
+            for card in self.cards:
+                if card.split(" ")[1] == joker[0]:
+                    jokerIndex = self.cards.index(card)
+                    break
+            self.autoPlayJoker(player, jokerIndex, gameCard, market, rules)
+            return
         for card in self.cards:
             computerCanPlay = self.canPlay(self.cards.index(card), gameCard)
             if computerCanPlay == True:
                 indexToPlay = int(self.cards.index(card))
 
-                print(indexToPlay, self.cards, indexToPlay-1)
+                # print(indexToPlay, self.cards, indexToPlay-1)
                 self.playCard(indexToPlay,
-                              gameCard, market, player)
+                              gameCard, market, player, rules)
                 self.hasPlayed = True
                 break
             else:
@@ -308,7 +491,69 @@ class Player:
             self.hasPlayed = False
             return
 
-    def takeTurn(self, computer, gameCard, market):
+    def forcePlay(self, Index, gameCard, computer, market, rules):
+        gameCard.append(self.cards[Index])
+        print(Fore.CYAN + self.name + Fore.RESET + " played ", end="")
+        displaySingleCard(self.cards[Index], end="\n")
+        if len(self.cards) == 1 and self.cards[Index].split(" ")[1] == joker[0]:
+            self.jokerWasLastCard = True
+            print(Fore.CYAN + self.name + Fore.RESET +
+                  "'s Last Card was a WHOT so")
+        if self.cards[Index].split(" ")[0] in cardDict.keys():
+            key = self.cards[Index].split(" ")[0]
+            if specials.index(key) == 0 and rules.generalMarket:
+                print("line 419 - That's a " + Fore.YELLOW +
+                      cardDict[key] + Fore.RESET)
+                computer.goToMarket(market, self)
+                self.cards.pop(Index)
+                market.append(gameCard[0])
+                shuffle(market)
+                gameCard.pop(0)
+                if len(self.cards) == 1:
+                    print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                          Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                if len(self.cards) == 0:
+                    self.hasWon = True
+                self.isTurn = True
+                computer.isTurn = False
+
+            elif specials.index(key) == 1 and rules.holdOn:
+                print("line 352 - That's a " + Fore.YELLOW +
+                      cardDict[key] + Fore.RESET)
+                self.cards.pop(Index)
+                market.append(gameCard[0])
+                shuffle(market)
+                gameCard.pop(0)
+                if len(self.cards) == 1:
+                    print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                          Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+                if len(self.cards) == 0:
+                    print(Fore.CYAN + self.name + Fore.RESET + " can't win with a " +
+                          Fore.YELLOW + "'hold on'" + Fore.RESET + " so")
+                    self.goToMarket(market, computer)
+                    self.hasWon = False
+                self.isTurn = True
+                computer.isTurn = False
+                return
+
+        self.cards.pop(Index)
+
+        if self.jokerWasLastCard == True:
+            self.goToMarket(market, computer)
+            self.jokerWasLastCard = False
+
+        market.append(gameCard[0])
+        shuffle(market)
+        gameCard.pop(0)
+        if len(self.cards) == 1:
+            print(Fore.CYAN + self.name + Fore.RESET + " said - " +
+                  Fore.MAGENTA + "'Last Card!!'" + Fore.RESET)
+        if len(self.cards) == 0:
+            self.hasWon = True
+        self.isTurn = False
+        computer.isTurn = True
+
+    def takeTurn(self, computer, gameCard, market, rules):
         print("What would you like to do?")
         displaySuites()
         print("Play a card" + Fore.CYAN + " ( 1 -", str(len(self.cards)), ")" + Fore.RESET +
@@ -316,21 +561,33 @@ class Player:
         action = input()
         try:
             if int(action) in range(1, len(self.cards) + 1):
-                print(action)
-                print(self.cards)
-                print(self.cards[int(action) - 1])
                 cardParts = self.cards[int(action) - 1].split(" ")
-                print(cardParts)
                 if cardParts[1] == joker[0]:
-                    print("That's a Joker")
-                    self.playJoker()
+                    print("That's a Joker!")
+                    self.playJoker(computer)
+                    print("reached here - line 447")
+                    self.forcePlay(int(action) - 1,
+                                   gameCard, computer, market, rules)
+
+                    return
+                if len(self.hasToPlay) > 0:
+                    if self.cards[int(action) - 1].split(" ")[1] == self.hasToPlay:
+                        self.forcePlay(int(action) - 1,
+                                       gameCard, computer, market, rules)
+                        self.hasToPlay = ""
+                    else:
+                        print("Sorry " + Fore.CYAN + self.name + Fore.RESET + ", " + Fore.CYAN + computer.name +
+                              Fore.RESET + " said you have to play a " + Fore.MAGENTA + self.hasToPlay + Fore.RESET)
+                    return
                 canPlay = self.canPlay(int(action), gameCard)
-                print(canPlay)
                 if canPlay:
-                    self.playCard(int(action), gameCard, market, computer)
+                    self.playCard(int(action), gameCard,
+                                  market, computer, rules)
                 else:
-                    print("Sorry", self.name, ", you can't play that card")
-                    print("(enter '--help' for help, or '--rules' for rules)")
+                    print("Sorry " + Fore.CYAN + self.name +
+                          Fore.RESET + ", you can't play that card")
+                    print("(enter " + Fore.YELLOW + "'--help'" + Fore.RESET +
+                          " for help, or " + Fore.YELLOW + "'--rules'" + Fore.RESET + " for rules)")
             elif int(action) == len(self.cards) + 1:
                 self.goToMarket(market, computer)
         except:
@@ -376,6 +633,15 @@ class Game:
         self.market = self.deck[0: len(self.deck) - 1]
         del self.deck[0: len(self.deck) - 1]
 
+    def goToMarket(self):
+        print(Fore.MAGENTA + "Game " + Fore.RESET +
+              "started with a WHOT card so")
+        print(Fore.MAGENTA + "Game " + Fore.RESET + "went to the market")
+        self.deck.append(self.market[-1])
+        self.market.append(self.deck[0])
+        self.deck.pop(0)
+        shuffle(self.market)
+
     def __str__(self):
         return(self.deck, self.market, self.rules)
 
@@ -391,7 +657,7 @@ def gameLoop(game, player, computer):
             if player.isTurn:
                 player.takeTurn()
             else:
-                computer.autoPlay(player, game.deck, game.market)
+                computer.autoPlay(player, game.deck, game.market, rules)
 
 
 # Game Menu
@@ -499,20 +765,22 @@ def prepareNewGame():
 
 # Check if card is special
 
-# Test area
-# displaySingleCard("K ♥")
-# displaySingleCard("Q ♣")
-# displaySingleCard("7 ♦")
-# displaySingleCard("A ♠")
-# displaySingleCard("W4 ★")
-# displaySuites()
-# displaySuites(True)
-# rules = Rules()
-# print(rules)
-# game = Game(rules)
-# print(game.rules)
+def showyDeckDisplay(deck):
+    displaySuites()
+    displaySuites(True)
+    for i in range(len(deck)):
+        displaySingleCard(deck[i])
+        if i > 0 and i % 11 == 0:
+            displaySuites(True)
+            displaySuites()
+            print("\n")
+        sleep(0.02)
+    displaySuites(True)
+    displaySuites()
+
 
 newDeck = makeDeck(deck, suites, letters, numbers, noOfJokers)
+showyDeckDisplay(newDeck)
 shuffle(newDeck)
 rules = Rules()
 game = Game(rules, newDeck, [])
@@ -524,16 +792,25 @@ computer.cards = game.serveCards()
 print(player.cards, computer.cards)
 # print(game.deck)
 print(game.deck)
+
 # print(player.cards, computer.cards)
 game.setMarket()
 # displayGame(game, player, computer)
 player.isTurn = True
+while game.deck[0].split(" ")[1] == joker[0]:
+    game.goToMarket()
+# clear()
+
 while True:
     if player.hasWon == False and computer.hasWon == False:
         displayGame(game, player, computer)
+
         if player.isTurn:
-            print(player.name + ", it's your turn")
-            player.takeTurn(computer, game.deck, game.market)
+            print(Fore.CYAN + player.name + Fore.RESET + ", it's your turn")
+            player.takeTurn(computer, game.deck, game.market, game.rules)
+            # sleep(2)
         else:
-            print("it's the " + computer.name + "'s turn")
-            computer.autoPlay(player, game.deck, game.market)
+            print("it's the " + Fore.CYAN +
+                  computer.name + Fore.RESET + "'s turn")
+            computer.autoPlay(player, game.deck, game.market, game.rules)
+            # sleep(2)
