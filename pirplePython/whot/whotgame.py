@@ -2,7 +2,7 @@
 File: main.py V1.0
 Auth: Bankole Esan
 Desc: Pirple.com Python Final Project
-Task: WHOT Card game with customizable options
+Task: Whot Card game
 """
 # Game Imports
 from os import system, name, path
@@ -23,8 +23,12 @@ letters = ["A", "J", "Q", "K"]
 specials = ["K", "A", "2", "5", "8"]
 cardDict = {'A': 'hold on', '2': 'pick two', '5': 'pick three',
             '8': 'suspension', 'K': 'general market'}
-noOfStartingCards = 2
+noOfStartingCards = 5
 deck = []
+gameIsOn = False
+game = ''
+player = ''
+computer = ''
 
 
 ########## Game Functions #########
@@ -147,6 +151,16 @@ def showyDeckDisplay(deck):
     sleep(2)
 
 
+def debug(game=game, player=player, computer=computer):
+    showTitle("App Debugger")
+    print(" - - Game Deck")
+    print(game.deck)
+    print(" - - Player Cards")
+    print(player.cards)
+    print(" - - Computer Cards")
+    print(computer.cards)
+
+
 def showHelp():
     clear()
     showTitle("how to play whot")
@@ -211,15 +225,38 @@ def showHelp():
     print("Enter " + Fore.YELLOW + "'--help'" + Fore.RESET +
           " at any time during the game to view this help, and " + Fore.YELLOW + "'--rules'" + Fore.RESET + " to view rules)")
     print("Enter " + Fore.YELLOW + "'--resume'" + Fore.RESET + " to resume")
-    if input("Press any key to continue ('--resume' to resume)... ").upper() == "--RESUME":
-        pass
-    else:
-        return
-
-    ########## Game Classes ##########
-    # Player Class
+    input("Press any key to continue... ")
+    if gameIsOn == False:
+        mainMenu()
+    elif gameIsOn == True:
+        gameLoop(game, player, computer)
 
 
+def gameLoop(deck, rules, player, computer):
+    clear()
+    game = Game(rules, deck, [])
+    player.cards = game.serveCards()
+    computer.cards = game.serveCards()
+    game.setMarket()
+    player.isTurn = True
+    while game.deck[0].split(" ")[1] == joker[0]:
+        game.goToMarket()
+    while True:
+        if player.hasWon == False and computer.hasWon == False:
+            displayGame(game, player, computer)
+
+        if player.isTurn:
+            print(Fore.CYAN + player.name + Fore.RESET + ", it's your turn")
+            player.takeTurn(computer, game.deck, game.market, game.rules)
+            # sleep(2)
+        else:
+            print("it's the " + Fore.CYAN +
+                  computer.name + Fore.RESET + "'s turn")
+            computer.autoPlay(player, game.deck, game.market, game.rules)
+
+
+########## Game Classes ##########
+# Player Class
 class Player:
     def __init__(self, name, score=0, cards=[], hasToPick=0, isSuspended=False, hasWon=False, isTurn=False, hasPlayed=False, hasToPlay="", jokerWasLastCard=False):
         self.name = name
@@ -284,7 +321,7 @@ class Player:
                 Index = self.cards.index(card)
                 self.forcePlay(Index, gameCard, opponent, market, rules)
                 self.hasToPick = 0
-
+                # print(Fore.CYAN + self.name + Fore.RESET + " deflected the card")
                 break
             elif card.split(" ")[1] == joker[0]:
                 jokerIndex = self.cards.index(card)
@@ -298,7 +335,7 @@ class Player:
                     self.forcePlay(jokerIndex, gameCard,
                                    opponent, market, rules)
                     self.hasToPick = 0
-
+                    # print(Fore.CYAN + self.name + Fore.RESET + " deflected the card")
                     return
         print(Fore.CYAN + self.name + Fore.RESET + " deflected the card")
         if len(self.cards) == 1:
@@ -403,7 +440,7 @@ class Player:
             if self.cards[cardIndex-1].split(" ")[0] in cardDict.keys():
                 key = self.cards[cardIndex-1].split(" ")[0]
                 if specials.index(key) == 0 and rules.generalMarket:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 382 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.goToMarket(market, self)
                     self.cards.pop(cardIndex-1)
@@ -420,7 +457,7 @@ class Player:
                     return
 
                 elif specials.index(key) == 1 and rules.holdOn:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 399 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     self.cards.pop(cardIndex-1)
                     market.append(gameCard[0])
@@ -443,7 +480,7 @@ class Player:
                     market.append(gameCard[0])
                     shuffle(market)
                     gameCard.pop(0)
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 422 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.hasToPick = 2
                     print(Fore.CYAN + opponent.name + Fore.RESET + " has to pick " +
@@ -477,7 +514,7 @@ class Player:
                     market.append(gameCard[0])
                     shuffle(market)
                     gameCard.pop(0)
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 456 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.hasToPick = 3
                     print(Fore.CYAN + opponent.name + Fore.RESET + " has to pick " +
@@ -507,7 +544,7 @@ class Player:
                     return
 
                 elif specials.index(key) == 4 and rules.suspension:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 486 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     self.cards.pop(cardIndex-1)
                     market.append(gameCard[0])
@@ -536,7 +573,6 @@ class Player:
                 self.hasWon = True
             self.isTurn = False
             opponent.isTurn = True
-            return
 
         elif cardParts[1] == gameCardParts[1]:
             print(Fore.CYAN + self.name + Fore.RESET + " played ", end="")
@@ -545,7 +581,7 @@ class Player:
             if self.cards[cardIndex-1].split(" ")[0] in cardDict.keys():
                 key = self.cards[cardIndex-1].split(" ")[0]
                 if specials.index(key) == 0 and rules.generalMarket:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 523 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.goToMarket(market, self)
                     self.cards.pop(cardIndex-1)
@@ -562,7 +598,7 @@ class Player:
                     return
 
                 elif specials.index(key) == 1 and rules.holdOn:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 540 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     self.cards.pop(cardIndex-1)
                     market.append(gameCard[0])
@@ -585,7 +621,7 @@ class Player:
                     market.append(gameCard[0])
                     shuffle(market)
                     gameCard.pop(0)
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 563 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.hasToPick = 2
                     print(Fore.CYAN + opponent.name + Fore.RESET + " has to pick " +
@@ -619,7 +655,7 @@ class Player:
                     market.append(gameCard[0])
                     shuffle(market)
                     gameCard.pop(0)
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 597 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     opponent.hasToPick = 3
                     print(Fore.CYAN + opponent.name + Fore.RESET + " has to pick " +
@@ -649,7 +685,7 @@ class Player:
                     return
 
                 elif specials.index(key) == 4 and rules.suspension:
-                    print(" - That's a " + Fore.YELLOW +
+                    print("line 627 - That's a " + Fore.YELLOW +
                           cardDict[key] + Fore.RESET)
                     self.cards.pop(cardIndex-1)
                     market.append(gameCard[0])
@@ -678,7 +714,6 @@ class Player:
                 self.hasWon = True
             self.isTurn = False
             opponent.isTurn = True
-            return
 
     def hasJoker(self):
         for card in self.cards:
@@ -744,7 +779,7 @@ class Player:
         if self.cards[Index].split(" ")[0] in cardDict.keys():
             key = self.cards[Index].split(" ")[0]
             if specials.index(key) == 0 and rules.generalMarket:
-                print(" - That's a " + Fore.YELLOW +
+                print("line 721 - That's a " + Fore.YELLOW +
                       cardDict[key] + Fore.RESET)
                 computer.goToMarket(market, self)
                 self.cards.pop(Index)
@@ -761,7 +796,7 @@ class Player:
                 return
 
             elif specials.index(key) == 1 and rules.holdOn:
-                print(" - That's a " + Fore.YELLOW +
+                print("line 738 - That's a " + Fore.YELLOW +
                       cardDict[key] + Fore.RESET)
                 self.cards.pop(Index)
                 market.append(gameCard[0])
@@ -784,7 +819,7 @@ class Player:
                 market.append(gameCard[0])
                 shuffle(market)
                 gameCard.pop(0)
-                print(" - That's a " + Fore.YELLOW +
+                print("line 761 - That's a " + Fore.YELLOW +
                       cardDict[key] + Fore.RESET)
                 computer.hasToPick = 2
                 print(Fore.CYAN + computer.name + Fore.RESET + " has to pick " +
@@ -827,7 +862,7 @@ class Player:
                 market.append(gameCard[0])
                 shuffle(market)
                 gameCard.pop(0)
-                print(" - That's a " + Fore.YELLOW +
+                print("line 804 - That's a " + Fore.YELLOW +
                       cardDict[key] + Fore.RESET)
                 computer.hasToPick = 3
                 print(Fore.CYAN + computer.name + Fore.RESET + " has to pick " +
@@ -866,7 +901,7 @@ class Player:
                 return
 
             elif specials.index(key) == 4 and rules.suspension:
-                print(" - That's a " + Fore.YELLOW +
+                print("line 843 - That's a " + Fore.YELLOW +
                       cardDict[key] + Fore.RESET)
                 self.cards.pop(Index)
                 market.append(gameCard[0])
@@ -900,22 +935,20 @@ class Player:
             self.hasWon = True
         self.isTurn = False
         computer.isTurn = True
-        return
 
     def takeTurn(self, computer, gameCard, market, rules):
-
         print("What would you like to do?")
         displaySuites()
         print("Play a card" + Fore.CYAN + " ( 1 -", str(len(self.cards)), ")" + Fore.RESET +
               " Go to Market " + Fore.CYAN + "( " + str(len(self.cards) + 1) + " )" + Fore.RESET + " : ", end="")
         action = input()
-
         try:
             if int(action) in range(1, len(self.cards) + 1):
                 cardParts = self.cards[int(action) - 1].split(" ")
                 if cardParts[1] == joker[0]:
                     print("That's a Joker!")
                     self.playJoker(computer)
+                    print("reached here - line 890")
                     self.forcePlay(int(action) - 1,
                                    gameCard, computer, market, rules)
 
@@ -940,13 +973,11 @@ class Player:
                           " for help, or " + Fore.YELLOW + "'--rules'" + Fore.RESET + " for rules)")
             elif int(action) == len(self.cards) + 1:
                 self.goToMarket(market, computer)
-                return
         except:
             if action == "--help":
                 showHelp()
-
-            elif action == "--rules":
-                print(rules)
+            elif action == "--debug":
+                debug()
 
     def __str__(self):
         return (self.name, self.score, self.hasWon, self.isTurn)
@@ -1014,11 +1045,14 @@ def mainMenu():
             prepareNewGame()
 
         elif int(menuOption) == 2:
-            showHelp()
 
+            showHelp()
+            newUrl = input("Please enter a URL : ")
+            # runCode(newUrl)
         elif int(menuOption) == 3:
             showTitle('Thank you for Playing')
             sys.exit(0)
+            exit = -1
     except:
         if menuOption == "--help":
             showHelp()
@@ -1026,91 +1060,103 @@ def mainMenu():
         print("Please enter a valid option")
 
 
-mainMenu()
+def prepareNewGame():
 
-
-displaySuites()
-playerName = input("What's your name, Player? : ").upper()
-player = Player(playerName)
-computer = Player("Computer".upper())
-
-displaySuites()
-print(player.name, end="")
-print(", do you want to use the default options? (default is yes) (y/n): ", end="")
-useDefaultOptions = input().upper()
-if useDefaultOptions == "N":
     displaySuites()
-    pickTwo = False if input(
-        "Enable Pick Two? (Default is yes) (y/n) : ").upper() == "N" else True
-    displaySuites()
-    pickThree = False if input(
-        "Enable Pick Three? (Default is yes) (y/n) : ").upper() == "N" else True
-    displaySuites()
-    holdOn = False if input(
-        "Enable Hold On? (Default is yes) (y/n) : ").upper() == "N" else True
-    displaySuites()
-    suspension = False if input(
-        "Enable Suspension? (Default is yes) (y/n) : ").upper() == "N" else True
-    displaySuites()
-    generalMarket = False if input(
-        "Enable General Market? (Default is yes) (y/n) : ").upper() == "N" else True
-    displaySuites()
-    deflection = False if input(
-        "Enable Deflection? (Default is yes) (y/n) : ").upper() == "N" else True
-    rules = Rules(pickTwo, pickThree, holdOn,
-                  suspension, generalMarket, deflection)
-else:
-    rules = Rules()
-showTitle("Rules Set")
-print(rules)
+    playerName = input("What's your name, Player? : ").upper()
+    player = Player(playerName)
+    computer = Player("Computer".upper())
 
-# create new deck, and empty market
-displaySuites()
-print("Setting Deck")
-newDeck = makeDeck(deck, suites, letters, numbers, noOfJokers)
-# Shuffle Deck
-displaySuites()
-print("shuffling Cards")
-shuffle(newDeck)
-# create game object with rules
-displaySuites()
-print("setting up New Game")
-input("Press any Button to continue...")
-
-
-clear()
-game = Game(rules, newDeck, [])
-player.cards = game.serveCards()
-computer.cards = game.serveCards()
-game.setMarket()
-player.isTurn = True
-while game.deck[0].split(" ")[1] == joker[0]:
-    game.goToMarket()
-
-while player.hasWon == computer.hasWon == False:
-    displayGame(game, player, computer)
-    print("\n", end="")
-    if player.isTurn:
-        print(Fore.CYAN + player.name +
-              Fore.RESET + ", it's your turn")
-        player.takeTurn(computer, game.deck, game.market, game.rules)
-        sleep(1)
+    # Ask to set rules, if yes ask options and set rules and instatiate rules object with answers
+    displaySuites()
+    print(player.name, end="")
+    print(" want to use the default settings? (default is yes) (y/n): ", end="")
+    useDefaultOptions = input().upper()
+    if useDefaultOptions == "N":
+        displaySuites()
+        pickTwo = False if input(
+            "Enable Pick Two? (Default is yes) (y/n) : ").upper() == "N" else True
+        displaySuites()
+        pickThree = False if input(
+            "Enable Pick Three? (Default is yes) (y/n) : ").upper() == "N" else True
+        displaySuites()
+        holdOn = False if input(
+            "Enable Hold On? (Default is yes) (y/n) : ").upper() == "N" else True
+        displaySuites()
+        suspension = False if input(
+            "Enable Suspension? (Default is yes) (y/n) : ").upper() == "N" else True
+        displaySuites()
+        generalMarket = False if input(
+            "Enable General Market? (Default is yes) (y/n) : ").upper() == "N" else True
+        displaySuites()
+        deflection = False if input(
+            "Enable Deflection? (Default is yes) (y/n) : ").upper() == "N" else True
+        rules = Rules(pickTwo, pickThree, holdOn,
+                      suspension, generalMarket, deflection)
     else:
-        print("it's the " + Fore.CYAN +
-              computer.name + Fore.RESET + "'s turn")
-        computer.autoPlay(player, game.deck, game.market, game.rules)
-        sleep(1)
-if player.hasWon:
-    showTitle(player.name + ' WINS!!!')
-    displaySuites()
-    print(" - Congrats " + Fore.CYAN +
-          player.name + Fore.RESET + "! Good Game!!!")
-    input("Press any Key to continue... ")
+        rules = Rules()
+    showTitle("Rules Set")
+    print(rules)
 
-elif computer.hasWon:
-    showTitle(computer.name + " WINS!!!")
+    # create new deck, and empty market
     displaySuites()
-    print(" - Too bad " + Fore.CYAN + player.name +
-          Fore.RESET + ", maybe next time ")
-    input("Press any Key to continue...")
+    print("Setting Deck")
+    newDeck = makeDeck(deck, suites, letters, numbers, noOfJokers)
+    # Shuffle Deck
+    displaySuites()
+    print("shuffling Cards")
+    shuffle(newDeck)
+    # create game object with rules
+    displaySuites()
+    print("setting up New Game")
+    # newGame = Game(rules, newDeck, [])
+    # # Game servercards to player
+    # newGame.serveCards(player)
+    # newGame.serveCards(computer)
+    # newGame.setMarket()
+    print("Reached here")
+    # Game save Game
+    # Start Game loo
+    gameLoop(deck, rules, player, computer)
+
+
 mainMenu()
+
+
+showyDeck = makeDeck([], suites, letters, numbers, 0)
+
+
+newDeck = makeDeck(deck, suites, letters, numbers, noOfJokers)
+
+
+# shuffle(newDeck)
+# rules = Rules()
+# game = Game(rules, newDeck, [])
+# player = Player("Banky".upper())
+# computer = Player("Computer".upper())
+# # print(game.deck)
+# player.cards = game.serveCards()
+# computer.cards = game.serveCards()
+
+
+# # print(player.cards, computer.cards)
+# game.setMarket()
+# # displayGame(game, player, computer)
+# player.isTurn = True
+# while game.deck[0].split(" ")[1] == joker[0]:
+#     game.goToMarket()
+# # clear()
+
+# while True:
+#     if player.hasWon == False and computer.hasWon == False:
+#         displayGame(game, player, computer)
+
+#         if player.isTurn:
+#             print(Fore.CYAN + player.name + Fore.RESET + ", it's your turn")
+#             player.takeTurn(computer, game.deck, game.market, game.rules)
+#             # sleep(2)
+#         else:
+#             print("it's the " + Fore.CYAN +
+#                   computer.name + Fore.RESET + "'s turn")
+#             computer.autoPlay(player, game.deck, game.market, game.rules)
+#             # sleep(2)
