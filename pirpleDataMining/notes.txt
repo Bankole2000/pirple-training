@@ -1,0 +1,4 @@
+import panda as pd 
+
+NOTE: To get a data frame
+df = pd.read_type("file")

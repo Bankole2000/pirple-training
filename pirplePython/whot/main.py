@@ -1,10 +1,11 @@
+# PROJECT: FILE: main.py FOLDER: Whot
 """
 File: main.py V1.0
 Auth: Bankole Esan
 Desc: Pirple.com Python Final Project
 Task: WHOT Card game with customizable options
 """
-# Game Imports
+# SECTION: Game Imports
 from os import system, name, path
 import sys
 from random import shuffle, choice
@@ -12,7 +13,7 @@ from colorama import init, Fore, Back, Style
 from time import sleep
 init()
 
-# Game Constants
+# SECTION: Game Constants
 redSuite = (u'\u2665',  u'\u2666')
 blackSuite = (u'\u2660',  u'\u2663')
 suites = (u'\u2660', u'\u2665', u'\u2666', u'\u2663')
