@@ -12,16 +12,18 @@ const https = require('https');
 // ☝️ module for handling requests but with https
 const url = require('url');
 // ☝️ used for parsing the url
+const path = require('path');
+// ☝️ used to navigate the file system
 const fs = require('fs');
 // ☝️ used to read files - data and ssl files
 const StringDecoder = require('string_decoder').StringDecoder;
 // ☝️ used to parse payload (body of the )
-const config = require('./lib/config');
+const config = require('./config');
 // ☝️ used to import exports from config file
-const _data = require('./lib/data');
+const _data = require('./data');
 // ☝️ used for writing to the data files
-const handlers = require('./lib/handlers');
-const helpers = require('./lib/helpers');
+const handlers = require('./handlers');
+const helpers = require('./helpers');
 
 // endOfSection:
 //#region TESTS - testing area
@@ -50,33 +52,29 @@ const helpers = require('./lib/helpers');
 // });
 //#endregion
 
+// Instantiate the server module object
+const server = {};
+
 // SECTION: HTTP and HTTPS SERVERS
 // FEATURE: Http Server
-const httpServer = http.createServer((req, res) => {
-  unifiedServer(req, res);
+server.httpServer = http.createServer((req, res) => {
+  server.unifiedServer(req, res);
 });
-// Start the server
-httpServer.listen(config.httpPort, () => {
-  console.log(
-    `The server is listening on port ${config.httpPort} in ${config.envName} mode`
-  );
-}); // endFEAT:
+// endFEAT:
 // FEATURE: HTTPS Server
-const httpsServerOptions = {
-  key: fs.readFileSync('./https/key.pem'),
-  cert: fs.readFileSync('./https/cert.pem'),
+server.httpsServerOptions = {
+  key: fs.readFileSync(path.join(__dirname, '/../https/key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '/../https/cert.pem')),
 };
-const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
-  unifiedServer(req, res);
-});
-// Start the https server
-httpsServer.listen(config.httpsPort, () => {
-  console.log(
-    `The server is listening on port ${config.httpsPort} in ${config.envName} mode`
-  );
-}); // endFEAT:
+server.httpsServer = https.createServer(
+  server.httpsServerOptions,
+  (req, res) => {
+    server.unifiedServer(req, res);
+  }
+);
+// endFEAT:
 // FEATURE: Unified Server
-const unifiedServer = (req, res) => {
+server.unifiedServer = (req, res) => {
   // Get the Url and parse it
   const parsedUrl = url.parse(req.url, true);
 
@@ -105,9 +103,9 @@ const unifiedServer = (req, res) => {
 
     // Choose request handler from router object
     const chosenHandler =
-      typeof router[trimmedPath] !== 'undefined'
-        ? router[trimmedPath]
-        : router.notFound;
+      typeof server.router[trimmedPath] !== 'undefined'
+        ? server.router[trimmedPath]
+        : server.router.notFound;
 
     // Construct data to send to router object
     const data = {
@@ -135,14 +133,14 @@ const unifiedServer = (req, res) => {
       res.end(payloadString);
 
       // log the request path
-      console.log(payload);
+      // console.log(payload);
     });
   });
 }; // endFEAT:
 //endOfSection:
 
 // SECTION: DESCRIPTION: Handles all routes
-const router = {
+server.router = {
   sample: handlers.sample,
   notFound: handlers.notFound,
   hello: handlers.hello,
@@ -152,3 +150,23 @@ const router = {
   checks: handlers.checks,
 };
 // endOfSection:
+
+// Init script
+server.init = () => {
+  // Start the server
+  server.httpServer.listen(config.httpPort, () => {
+    console.log(
+      `The server is listening on port ${config.httpPort} in ${config.envName} mode`
+    );
+  });
+
+  // Start the https server
+  server.httpsServer.listen(config.httpsPort, () => {
+    console.log(
+      `The server is listening on port ${config.httpsPort} in ${config.envName} mode`
+    );
+  });
+};
+
+// Export the whole server as a module
+module.exports = server;

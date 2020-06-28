@@ -65,7 +65,7 @@ helpers.createRandomString = (strLength) => {
 helpers.sendTwilioSms = (phone, msg, callback) => {
   // Validate params
   phone =
-    typeof phone == 'string' && phone.trim().length == 10 ? phone.trim : false;
+    typeof phone == 'string' && phone.trim().length == 11 ? phone.trim : false;
   msg =
     typeof msg == 'string' && msg.trim().length > 0 && msg.trim().length <= 1600
       ? msg.trim()

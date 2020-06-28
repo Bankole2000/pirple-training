@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="stylesheet" href="assets/css/mdi5.min.css" />
+    <link rel="stylesheet" href="assets/css/toast.css" /> -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <title>Tutorial Requests</title>
+  </head>
+  <body>
+    <!-- New Request modal -->
+    <div class="new-request">
+      <div class="modal">
+        <h2>Request a Tutorial</h2>
+        <form action="">
+          <input type="text" name="request" placeholder="Request..." />
+          <button>Submit Request</button>
+          <p class="error"></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Nav bar -->
+    <header>
+      <div class="user-profile">
+        <img src="" alt="Profile Image" />
+        <a class="user-email" id="">
+          your@email.com
+        </a>
+      </div>
+      <nav>
+        <a class="add-request">add request</a>
+        <a class="sign-out">sign out</a>
+      </nav>
+    </header>
+
+    <!-- Content (kind of a d'uh) -->
+    <section class="content" id="app">
+      <input type="hidden" name="user-id" />
+      <h1>New Todo List</h1>
+      <input type="text" placeholder="New Todo List Name" />
+      <ul class="todo-list">
+        <li>
+          <input
+            type="text"
+            class="todo-item"
+            placeholder="New Todo List Item"
+          />
+
+          <div>
+            <span class="addTodoItem item-action"
+              >➕ <span class="item-action-text">Add</span></span
+            >
+            <span class="editTodoItem item-action"
+              >✏️ <span class="item-action-text">Edit</span></span
+            >
+            <span class="deleteTodoItem item-action"
+              >❌ <span class="item-action-text">Delete</span></span
+            >
+          </div>
+        </li>
+      </ul>
+      <button class="call">Save 💾</button>
+      <a href="mailto:techybanky@gmail.com">
+        <button>Cancel ❌</button>
+      </a>
+    </section>
+
+    <footer>
+      <p class="footer-text">
+        <a href="https://www.pirple.com" target="_blank"> 💜 Pirple.com</a>
+        Javascript 👨‍💻 Project #1
+      </p>
+      <p>
+        &copy;<span class="year"></span>
+        <a href="https://bankole2000.github.io/portfolio" target="_blank"
+          >Bankole Esan</a
+        >
+      </p>
+    </footer>
+
+    <!-- <script src="assets/js/materialize.min.js"></script>
+    <script src="assets/js/vue.js"></script>
+    <script src="assets/js/md5.js"></script> -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/requests.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+      document.querySelector('.year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
