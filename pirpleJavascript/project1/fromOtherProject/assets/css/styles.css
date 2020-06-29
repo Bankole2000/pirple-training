@@ -79,9 +79,30 @@ header a:hover {
   margin-bottom: 80px;
 }
 
-/* request list styles */
 .todo-list li {
-  padding: 20px;
+  padding: 10px 20px;
+  margin: 10px auto;
+  list-style-type: none;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: scale(1);
+  transition: all 0.2s ease-out;
+}
+
+.todo-list li:hover {
+  transform: scale(1.06);
+}
+
+.todo-list li input {
+  width: 55%;
+}
+
+.account-list li {
+  padding: 1px 10px;
   margin: 10px auto;
   list-style-type: none;
   background: #fff;
@@ -92,24 +113,13 @@ header a:hover {
   align-items: center;
 }
 
-.todo-list li input {
+.todo-checkbox {
+  transform: scale(2.2);
+  width: 10% !important;
+}
+
+.account-list li input {
   width: 60%;
-}
-
-.todo-list .votes {
-  position: relative;
-  /* top: -5px; */
-  z-index: 0;
-}
-
-.todo-list .upvote {
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-.todo-list .upvote:active {
-  color: black;
-  background: #ffe100;
 }
 
 /* modal styles */
@@ -135,14 +145,16 @@ header a:hover {
 
 .message-box {
   width: 80%;
-  padding: 5px;
+  padding: 0px;
   background: forestgreen;
   text-align: center;
-  display: none;
+  display: flex;
+  height: 0px;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
   margin: 20px auto 0px auto;
+  transition: all 0.3s ease-out;
 }
 
 .message {

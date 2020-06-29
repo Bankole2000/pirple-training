@@ -34,14 +34,16 @@ document.addEventListener('click', (e) => {
 const showMessage = (message, success, time) => {
   let bgStyle = success ? 'forestgreen' : 'tomato';
   messageArea.style.background = bgStyle;
-  messageArea.style.display = 'flex';
+  messageArea.style.height = '40px';
+  messageArea.style.padding = '5px';
   messageSpan.textContent = message;
   setTimeout(() => {
     hideMessage();
   }, time * 1000);
 };
 const hideMessage = () => {
-  messageArea.style.display = 'none';
+  messageArea.style.height = '0px';
+  messageArea.style.padding = '0px';
   messageArea.style.background = 'grey';
   messageSpan.textContent = '';
 };
@@ -87,12 +89,117 @@ const createUUID = () => {
     return false;
   }
 };
+
+const prepareAccount = (user) => {
+  html = `<section class="content" id="app">
+  <input type="hidden" name="user-id" />
+  <h1>Account Settings</h1>
+  <ul class="account-list">
+    <li>
+      <h4>First Name: </h4>
+      <input
+        type="text"
+        class="todo-item"
+        placeholder="${user.firstName}"
+      />
+    </li>
+    <li>
+      <h4>Last Name: </h4>
+      <input
+        type="text"
+        class="todo-item"
+        placeholder="${user.lastName}"
+      />
+    </li>
+    <li>
+      <h4>Email: </h4>
+      <input
+        type="text"
+        class="todo-item"
+        placeholder="${user.email}"
+      />
+    </li>
+    <li>
+      <h4>Password: </h4>
+      <input
+        type="text"
+        class="todo-item"
+        placeholder="Password"
+      />
+    </li>
+    <li>
+      <h4>Confirm Password: </h4>
+      <input
+        type="text"
+        class="todo-item"
+        placeholder="Confirm Password"
+      />
+    </li>
+  </ul>
+  <button>Update ⚙️</button>
+  <button onclick='return prepareDashboard(loggedInUser)'>Back ❌</button>
+</section>`;
+  mainArea.innerHTML = html;
+  return false;
+};
+
+const prepareEditTodo = (id) => {
+  store.get('todos', id, (err, data) => {
+    if (!err) {
+      showMessage('Fetched Todo', true, 2);
+      console.log(data);
+      let html = `<section class="content">
+      <input type="hidden" name="user-id" value="${user.id}"/>
+      <h1>${data.SuccessData.name}</h1>
+      <ul class="todo-list">`;
+      let todos = data.SuccessData.items;
+      for (todo in data.SuccessData.items) {
+        console.log(todo);
+        html += `<li>
+        <input
+      type="checkbox"
+      class="todo-checkbox"
+      for="${todos[todo].id}"
+      
+    />
+        <input
+      type="text"
+      class="todo-item"
+      placeholder="${todos[todo].item}"
+      id="${todos[todo].id}"
+      value="${todos[todo].item}"
+      
+    />
+        <div>
+        <button class="item-action" onclick='actions.addNewTodoItem(event, this)'><span class="addTodoItem "
+        >➕ <span class="item-action-text">Add</span></span
+      ></button>
+          
+  <button class="item-action" onclick='actions.deleteTodoItem(event, this)'><span class="deleteTodoItem item-action" 
+    >❌ <span class="item-action-text">Delete</span></span
+  ></button>
+        </div>
+      </li>`;
+      }
+      html += `</ul>
+        <button onclick='actions.saveTodoList(event, loggedInUser)'>Update 💾</button>  
+        <button onclick='return prepareDashboard(loggedInUser)'>Cancel ❌</button>
+        </form>
+        </section>`;
+      mainArea.innerHTML = html;
+    } else {
+      showMessage('Failed to get todo data', false, 2);
+      console.log(data);
+    }
+  });
+};
+
 const prepareDashboard = (user) => {
   const gravatar = MD5(user.email.trim().toLowerCase());
   user.image = `https://www.gravatar.com/avatar/${gravatar}`;
   let headerhtml = `<div class="user-profile">
   <img src="${user.image}" alt="Profile Image" />
-  <a class="user-email" id="">
+  <a onclick='return prepareAccount(loggedInUser)' >
     Account Settings
   </a>
 </div>
@@ -108,13 +215,11 @@ const prepareDashboard = (user) => {
       store.get('todos', todo, (err, data) => {
         if (!err) {
           console.log(data);
-          html += `<li>
+          html += `<li onclick="prepareEditTodo('${todo}')" style="cursor: pointer;">
       <span class="text">${data.SuccessData.name}</span>
       <div>
         <span class="votes">${moment(data.SuccessData.created).fromNow()}</span>
-        <button class="item-action" onclick='actions.addNewTodoItem(event, this)'><span class="addTodoItem item-action" 
-  >✏️ <span class="item-action-text">Edit</span></span
-></button>
+        
 <button class="item-action" onclick='actions.deleteTodoItem(event, this)'><span class="deleteTodoItem item-action" 
   >❌ <span class="item-action-text">Delete</span></span
 ></button>
